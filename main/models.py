@@ -2,7 +2,6 @@ from django.db import models
 from django.forms import ModelForm # 모델 폼 설정
 
 from django.conf import settings
-from django.utils import timezone
 
 # Create your models here.
 class Users(models.Model):

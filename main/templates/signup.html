@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ko">
+    <head>
+        <title>sign up</title>
+
+        <meta charset="UTF-8">
+
+        <!-- Boot strap -->
+        <!-- 합쳐지고 최소화된 최신 CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+        <!-- 부가적인 테마 -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+        <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+        <link rel="stylesheet" href="{%static 'css/style.css' %}">
+        <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet">
+        <script src="https://kit.fontawesome.com/221ae2e8b7.js" crossorigin="anonymous"></script> 
+        <script src="{%static 'js/main.js' %}" defer></script>
+        
+        <style>
+            * {
+                margin: 0px;
+                padding: 0px;
+                text-decoration: none;
+                font-family:sans-serif;
+    
+                }
+    
+            body {
+                background-image:#34495e;
+                }
+    
+            .joinForm {
+                position:absolute;
+                width:400px;
+                height:400px;
+                padding: 30px, 20px;
+                background-color:#FFFFFF;
+                text-align:center;
+                top:40%;
+                left:50%;
+                transform: translate(-50%,-50%);
+                border-radius: 15px;
+                }
+            
+            .joinForm h2 {
+                text-align: center;
+                margin: 30px;
+                font-family:'굴림';
+                }
+    
+            .textForm {
+                border-bottom: 2px solid #adadad;
+                margin: 30px;
+                padding: 10px 10px;
+                }
+    
+    
+            .id {
+                width: 100%;
+                border:none;
+                outline:none;
+                color: #636e72;
+                font-size:16px;
+                height:25px;
+                background: none;
+                }
+    
+            .pw {
+                width: 100%;
+                border:none;
+                outline:none;
+                color: #636e72;
+                font-size:16px;
+                height:25px;
+                background: none;
+                }
+    
+            .email {
+                width: 100%;
+                border:none;
+                outline:none;
+                color: #636e72;
+                font-size:16px;
+                height:25px;
+                background: none;
+                }
+    
+            .btn {
+                position:relative;
+                left:40%;
+                transform: translateX(-50%);
+                margin-bottom: 40px;
+                width:80%;
+                height:40px;
+                background: linear-gradient(125deg,#81ec9f,#85e692,#81ec9f);
+                background-position: left;
+                background-size: 200%;
+                color:white;
+                font-weight: bold;
+                border:none;
+                cursor:pointer;
+                transition: 0.4s;
+                display:inline;
+                }
+    
+            .btn:hover {
+                background-position: right;
+                }
+    
+        </style>
+        <script>
+            function submit_click(){
+                var pw = document.getElementById('signupPW').value
+                var pwcheck = document.getElementById('signupPWcheck').value
+                if(pw == pwcheck){
+                    document.getElementById('signup-form').submit();
+                }else{
+                    alert("비밀번호가 일치하지 않습니다.")
+                    document.getElementById('signupPWcheck').focus()
+                }
+            }
+        </script>
+    </head>
+    <body>
+        {% include "navbar.html" %}
+        {% block content %}
+        <div class="container">
+
+            <!-- 메인 화면 바로가기 버튼 -->
+            <div class="header">
+                <!-- <div class="page-header">
+                    <a href="/" class="btn btn-default btn-xs" style="margin: 10px">메인화면</a>
+                        
+                </div> -->
+                
+            </div>
+            <!-- 여기까지 -->
+    
+            <form action="{%url 'join' %}" method="POST" id="signup-form" class="joinForm" onsubmit="DoJoinForm__submit(this); return false;">{% csrf_token %}
+                                                                                                   
+                <h2 style="color:#354138; "><b>회원가입</b></h2>
+                <div class="textForm">
+                  <input id="signupName" name="signupName" type="text" class="id" placeholder="이름">
+                  </input>
+                </div>
+                <div class="textForm">
+                   <input  id="signupEmail" name="signupEmail" type="email" class="email" placeholder="이메일">
+                </div>
+                <div class="textForm">
+                  <input id="signupPW" name="signupPW" type="password" class="pw" placeholder="비밀번호">
+                </div>
+                <div class="textForm">
+                  <input id="signupPWcheck" name="signupPWcheck" type="password" class="pw" placeholder="비밀번호 확인">
+                </div>
+                <div class="textForm">
+                    <input  id="signupAge" name="signupAge" type="number" class="age" placeholder="나이">
+                </div>
+                <div class="textForm">
+                    <input id="signupGender" name="signupGender" type="radio" class="gender" value=0 checked/>남성
+                    <input id="signupGender" name="signupGender" type="radio" class="gender" value=1 checked/>여성
+                </div>
+                
+    
+                <input type="submit" class="btn" onclick="submit_click();" value="J O I N"/> <!-- 회원가입하기 -->
+            </form>
+            
+        </div>
+        {% endblock %}
+    </body>
+</html>

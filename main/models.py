@@ -9,10 +9,7 @@ class Users(models.Model):
     user_date = models.DateTimeField(auto_now_add=True) #가입일(처음 등록한 시간으로 저장)
     user_email = models.EmailField(unique=True)
     user_password = models.CharField(max_length = 100)
-    class GenderChoices(models.TextChoices):
-        MALE = 'M'
-        FEMALE = 'F'
-    user_gender = models.CharField(choices=GenderChoices.choices, max_length=1, blank=True)
+    user_gender = models.IntegerField(default=0,blank=True, null=True)
     user_age = models.IntegerField(default=0, blank=True, null=True)
     def __str__(self):
         return f'{self.user_name}'

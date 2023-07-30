@@ -51,3 +51,23 @@ def join(request):
 
     else:
         return render(request, 'signup.html')
+
+def signin(request):
+    return render(request, 'signin.html')
+
+def login(request):
+    loginEmail = request.POST['loginEmail'] # signin.html <input name=loginEmail> 사용을 위해
+    loginPW = request.POST['loginPW']  # signin.html <input name=loginPW> 사용을 위해
+    user = Users.objects.get(user_email = loginEmail)
+    if user.user_password == loginPW:
+        request.session['user_name'] = user.user_name
+        request.session['user_email'] = user.user_email
+        return redirect('home')
+    else:
+        return redirect('signin')  
+
+
+def logout(request):
+    del request.session['user_name']
+    del request.session['user_email']
+    return redirect('signin')

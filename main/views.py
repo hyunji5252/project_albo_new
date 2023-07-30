@@ -30,18 +30,24 @@ def signup(request):
     return render(request, 'signup.html')
 
 def join(request):
-
+    
     # 메인화면 접속 시 필요한 데이터
     #items = Item.objects.all()
     name = request.POST['signupName']
     email = request.POST['signupEmail']
     pw = request.POST['signupPW']
+    pw_check = request.POST['signupPWcheck']
     gender = request.POST['signupGender']
-    #age = request.Post['signupAge']
-    user = Users(user_name = name, user_email = email, user_password = pw, user_gender = gender)
-    user.save()
+    age = request.POST['signupAge']
+
+    if pw==pw_check:
+        user = Users(user_name = name, user_email = email, user_password = pw, user_gender = gender, user_age = age)
+        user.save()
     
     # context = data_visualization()
     # context['items'] = items
 
-    return render(request, 'home.html')
+        return render(request, 'home.html')
+
+    else:
+        return render(request, 'signup.html')

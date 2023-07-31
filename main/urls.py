@@ -10,4 +10,8 @@ urlpatterns = [
     path('signin', views.signin, name='signin'),
     path('signin/login', views.login, name='login'),
     path('logout', views.logout, name='logout'),
+    path('upload', views.upload, name = 'upload'),
+    path('upload/predict_price', views.predict_price, name='predict_price'),
+    path('posting', views.posting, name='posting'),
+    
 ]

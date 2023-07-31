@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ko">
+  {% load static %}
+<head>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <title>Document</title>
+  <link href="" rel="stylesheet">
+
+      <!-- Additional CSS Files -->
+      <link rel="stylesheet" type="text/css" href="{%static 'assets/css/bootstrap.min.css'%}">
+
+      <link rel="stylesheet" type="text/css" href="{%static 'assets/css/font-awesome.css' %}">
+  
+      <link rel="stylesheet" href="{%static 'assets/css/templatemo-klassy-cafe.css' %}">
+  
+      <link rel="stylesheet" href="{%static 'assets/css/owl-carousel.css' %}">
+  
+      <link rel="stylesheet" href="{%static 'assets/css/lightbox.css' %}">
+       
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <!-- navbar  -->
+      <link rel="stylesheet" href="{%static 'css/style.css' %}">
+     <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet">
+     <script src="https://kit.fontawesome.com/221ae2e8b7.js" crossorigin="anonymous"></script> 
+     <script src="{%static 'js/main.js' %}" defer></script>
+  
+
+    <meta charset="UTF-8">
+
+    <!-- Boot strap -->
+    <!-- 합쳐지고 최소화된 최신 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <!-- 부가적인 테마 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+    <style>
+        .content{
+            height: 75%;
+        }
+        .messageDiv{
+            margin-top: 20px;
+            margin-bottom: 50px;
+        }
+        .custom-btn{
+            font-size: 10px;
+        }
+        .panel-footer{
+            height:10%;
+            color:gray;
+        }
+
+        .myButton {
+            box-shadow:inset 0px 1px 0px 0px #ffffff;
+            background:linear-gradient(to bottom, #f9f9f9 5%, #e9e9e9 100%);
+            background-color:#f9f9f9;
+            border-radius:6px;
+            border:1px solid #dcdcdc;
+            display:inline-block;
+            cursor:pointer;
+            color:#666666;
+            font-family:Arial;
+            font-size:15px;
+            font-weight:bold;
+            padding:6px 15px;
+            text-decoration:none;
+            text-shadow:0px 1px 0px #ffffff;
+          }
+        .myButton:hover {
+          background:linear-gradient(to bottom, #e9e9e9 5%, #f9f9f9 100%);
+          background-color:#e9e9e9;
+          }
+        .myButton:active {
+          position:relative;
+          top:1px;
+          }
+        
+     
+    </style>
+  
+
+
+    <title>Excel Calculate</title>
+</head>
+<body>
+    <div class="container">
+
+
+
+
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  
+
+
+<!-- 글작성란 -->
+<div class="container mt-3" style="position: relative; top:20px;">
+
+    <h1 style="color:#688770; font-family:Helvetica;"><b>Sell your Monstera albo</b></h1>
+    <hr>
+    
+      <form method="POST" id ="form1" enctype="multipart/form-data">{% csrf_token %}
+
+        <h5 style="color:#688770; font-family:KoPub;"><b>예상가격분류</b></h5>
+        <p><input type="file" class="form-control mt-2" name="file1" id="file1"></p>
+        <div>
+            <img src="" id="targetImg" style="width:300px">
+        </div>
+        <p><input type="button" class="myButton" value="예상 가격 구간" id="writeBtn"></p>
+
+      </form> 
+      <!-- 예측가격 팝업 띄우기 -->
+      <div style="float:left;">
+        <input type="button" class="myButton" id="가격을 예측해 드려요" value="구간 확인 하기" onclick="alert('{{predict}}')">&nbsp&nbsp 
+      </div> 
+      <div style="color:#688770; float:left;">
+        {% if predict %}
+        <h5 style="font-family:KoPub;"><b>가격 구간을 확인해주세요!</b></h5>
+        {% endif %}
+      </div>
+</div>
+<br>
+<div class="container mt-3" style="position: relative; top:20px;">
+      <form action="{% url 'posting' %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
+        
+        <input type="text" class="form-control mt-2"  name='item_name' placeholder="title" >
+        <input type="text" class="form-control mt-2"  name='item_price' placeholder="price">
+        <textarea class="form-control mt-2" rows="10" name="item_content" placeholder="content"></textarea>
+
+        <input class="form-control mt-2" type="file" name="item_img" onchange="loadFile(this)">
+        <div>
+          <img id="preview" style="width:300px">
+        </div>
+        <input type="hidden" value='{{predict}}' name="price_class">
+
+        <div align="right" style="position: relative; top:5px;">
+        <input type="submit" class="myButton"  value="제출">
+        </div>
+      </form> 
+</div>
+<br>
+<div class="container">
+  <br>
+  <div style="text-align:center">
+    <h5 style="color:#969b94">@Team Albino</h5>
+  </div>
+</div>    
+
+
+
+
+<!-- 사진 url form으로 넘겨주는 스크립트 -->
+  <script>
+    $(function(){
+        $('#writeBtn').click(function(){
+            $('#form1').attr('action','upload/predict_price')
+            $('#form1').submit()
+        });//클릭함수
+        
+        //html5 파일 기능
+        $('#file1').change(function(){
+            //업로드 파일 읽기
+            let fileInfo = document.getElementById("file1").files[0];
+            console.log(fileInfo)
+            let reader = new FileReader();
+            //readAsDataURL()을 통해 파일을 읽어들일 때 onload가 실행
+            reader.onload=function(){
+                document.getElementById("targetImg").src = reader.result;
+            };
+            if(fileInfo){
+                //readAsDataURL()을 통해 파일의 URL을 읽어온다.
+                reader.readAsDataURL(fileInfo);
+            }
+        })//chang 함수
+    })//시작함수
+  </script>
+
+   
+    
+    
+<script type="text/javascript">
+	function loadFile(input){
+		// 여러개의 이미지를 읽을수도 있기 때문에 
+		if(input.files && input.files[0]){
+			var fr = new FileReader();
+			//파일리더로 일고 읽는게 완료되면  만들어준 아이디에 속성값을 지정하여 사용하겠다.
+			fr.onload=function(event){
+				document.getElementById('preview').src=event.target.result;
+			};
+			fr.readAsDataURL(input.files[0]);
+			// 이미지파일을 읽어 온다.
+		}
+		else{
+			document.getElementById('preview').src="";
+		}
+	}
+</script>
+
+
+  
+
+
+
+
+  
+
+</body>
+</html>

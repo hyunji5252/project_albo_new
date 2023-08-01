@@ -29,9 +29,9 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <!-- navbar  -->
       <link rel="stylesheet" href="{%static 'css/style.css' %}">
-     <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet">
-     <script src="https://kit.fontawesome.com/221ae2e8b7.js" crossorigin="anonymous"></script> 
-     <script src="{%static 'js/main.js' %}" defer></script>
+      <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet">
+      <script src="https://kit.fontawesome.com/221ae2e8b7.js" crossorigin="anonymous"></script> 
+      <script src="{%static 'js/main.js' %}" defer></script>
   
 
     <meta charset="UTF-8">
@@ -93,6 +93,9 @@
     <title>Excel Calculate</title>
 </head>
 <body>
+  {% include "navbar.html" %}
+  {% block content %}
+        
     <div class="container">
 
 
@@ -213,6 +216,7 @@
 
   
 
+  {% endblock %}
 
 
 

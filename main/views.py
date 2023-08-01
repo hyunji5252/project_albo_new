@@ -14,17 +14,19 @@ import tensorflow as tf
 import os,glob
 import numpy as np
 from tensorflow import keras
-from tensorflow.keras.models import load_model, Model
-from tensorflow.keras.preprocessing import image
-from tensorflow.keras.applications.vgg16 import VGG16, preprocess_input
-import pandas as pd
-# from plotly.offline import plot
-# import plotly.graph_objects as go
+# from tensorflow.keras.models import load_model, Model
+# from tensorflow.keras.preprocessing import image
+# from tensorflow.keras.applications.vgg16 import VGG16, preprocess_input
+
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
+import main.visualization as visual #시각화 데이터 함수
 
 def home(request):
-    return render(request, 'home.html')
+    items = Item.objects.all().order_by('-pk') 
+    context = visual.data_visualization()
+    context['items'] = items
+    return render(request, 'home.html', context)
 
 def signup(request):
     return render(request, 'signup.html')
@@ -62,9 +64,9 @@ def login(request):
     if user.user_password == loginPW:
         request.session['user_name'] = user.user_name
         request.session['user_email'] = user.user_email
-        login_user = request.session['user_name']
-
-        return redirect('home')
+        #login_user = request.session['user_name']
+        print(request.session['user_name'])
+        return render(request, 'home.html')
     else:
         return redirect('signin')  
 
@@ -80,7 +82,8 @@ def upload(request):
     return render(request, 'upload.html')
 
 #가격예측버튼 누르면 실행되는 함수
-from PIL import Image
+#epoch100.h5는 모델 파일(git 업로드x)
+
 UPLOAD_DIR = r'C:\projects\albo\media\images'
 def predict_price(request):
     #predict_img = request.POST['predict_img']

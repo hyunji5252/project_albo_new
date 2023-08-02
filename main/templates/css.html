@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+<style>
+.section input[id*="slide"] {
+    display: none;
+}
+.section .slideWrap{
+    max-width: 1200px;
+    margin:0 auto;
+    overflow: hidden;
+}
+
+.section .slideList {
+    white-space: nowrap;
+    font-size: 0;
+}
+.section .slideList >li {
+    display: inline-block;
+    vertical-align: middle;
+    width: 100%;
+    transition: all .5s;
+}
+.section .slideList >li > a{
+    display: block;
+    position: relative;
+}
+.section .slideList >li >a img{
+    width: 100%;
+
+}
+.section .slideList label{
+    position: absolute;
+    z-index: 10;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+.section .slideList .left{
+    left: 30px;
+    background: url("{%static 'img/bg-01.jpg' %}") center center / 100% no-repeat;
+}
+
+.section .slideList .right{
+    right: 30px;
+    background: url("{%static 'img/bg-01.jpg' %}") center center / 100% no-repeat;
+}
+.section .slide-control [class*="control"] {display:none;}
+.section input[id*="slide01"]:checked ~ .slideWrap .slide-control {display:block;}
+.section input[id*="slide02"]:checked ~ .slideWrap .slide-control {display:block;}
+.section input[id*="slide03"]:checked ~ .slideWrap .slide-control {display:block;}
+
+.section input[id*="slide01"]:checked ~ .slideWrap .slideList >li {transform: translateX(0%);}
+.section input[id*="slide02"]:checked ~ .slideWrap .slideList >li {transform: translateX(-100%);}
+.section input[id*="slide03"]:checked ~ .slideWrap .slideList >li {transform: translateX(-200%);}
+</style>
+
+
+</head>
+<body>
+<div class="section">
+    <input type="radio" name="slide" id="slide01" checked>
+    <input type="radio" name="slide" id="slide02">
+    <input type="radio" name="slide" id="slide03">
+
+
+<div class="slideWrap">
+    <ul class ="slideList">
+        <li>
+            <a>
+                <label for="slide03" class="left"></label>
+                <img  width="300px" height="600px" src="{%static 'img/bg-01.jpg' %}">
+                <label for="slide02" class="right"></label>
+               
+            </a>
+        </li>
+        <li>
+            <a>
+                <img src="{%static 'img/bg-01.jpg' %}">
+            </a>
+        </li>
+        <li>
+            <a>
+                <img src="{%static 'img/bg-01.jpg' %}">
+            </a>
+        </li>
+        <div class="slide-control">
+            <div class="control01">
+                <label for="slide03" class="left"></label>
+                <label for="slide02" class="right"></label>
+            </div>
+            <div class="control02">
+                <label for="slide01" class="left"></label>
+                <label for="slide03" class="right"></label>
+            </div>
+            <div class="control03">
+                <label for="slide02" class="left"></label>
+                <label for="slide01" class="right"></label>
+            </div>
+        </div>
+    </ul>
+</div>
+</div>
+</body>
+
+</html>

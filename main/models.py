@@ -3,7 +3,7 @@ from django.forms import ModelForm # 모델 폼 설정
 
 from django.conf import settings
 
-# Create your models here.
+#회원 테이블
 class Users(models.Model):
     user_name = models.CharField(max_length= 20 , unique=True)
     user_date = models.DateTimeField(auto_now_add=True) #가입일(처음 등록한 시간으로 저장)
@@ -16,6 +16,7 @@ class Users(models.Model):
     class Meta:
         db_table = 'user_tb'
 
+#거래글 테이블
 class Item(models.Model):
     item_name = models.CharField(max_length = 20)
     user_name = models.ForeignKey(Users, to_field='user_name', related_name='seller', on_delete = models.CASCADE, db_column="user_name", max_length= 20, null=True) #fk추가
@@ -31,12 +32,12 @@ class Item(models.Model):
         return f'[{self.pk}]{self.item_name}'
 
     def get_absolute_url(self):
-        return f'/upload/posting/{self.pk}/'
+        return f'/posting/{self.pk}/'
     
     class Meta:
         db_table = 'item_tb'
 
-       
+#댓글 테이블       
 class Comment(models.Model):
     #pk(댓글번호)는 자동생성(id)
     user_name = models.ForeignKey(Users, to_field='user_name', related_name='commenter', on_delete = models.CASCADE,
@@ -61,3 +62,9 @@ class Comment(models.Model):
         if self.parent is None: #댓글일 경우
             return True
         return False
+
+#데이터 분석용 거래완료 테이블    
+class Trade(models.Model):
+        item_img = models.ImageField(upload_to="trade_images/", blank=True, null=True)
+        item_price = models.IntegerField(null=True)
+        item_date = models.DateField(auto_now_add=True,null=True)

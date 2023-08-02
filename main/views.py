@@ -14,9 +14,9 @@ import tensorflow as tf
 import os,glob
 import numpy as np
 from tensorflow import keras
-# from tensorflow.keras.models import load_model, Model
-# from tensorflow.keras.preprocessing import image
-# from tensorflow.keras.applications.vgg16 import VGG16, preprocess_input
+from tensorflow.keras.models import load_model, Model
+from tensorflow.keras.preprocessing import image
+from tensorflow.keras.applications.vgg16 import VGG16, preprocess_input
 
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
@@ -152,10 +152,101 @@ def posting(request):
     # context = data_visualization()
     # context['items'] = items
 
-    return render(request, 'home.html') 
+    items = Item.objects.all().order_by('-pk') 
+    context = visual.data_visualization()
+    context['items'] = items
+
+    return render(request, 'home.html', context) 
+
+def new_post(request, pk):
+    
+    items = Item.objects.get(pk=pk)
+    
+    # trade_status = items.trade_status
+    login_user = request.session['user_name']
+    post_user = str(items.user_name)
+     
+    comments = CommentForm() #forms.py
+   
+    context = dict()
+    context['items'] = items
+    context['comments'] = comments
+    context['login_user'] = login_user
+    context['post_user'] =  post_user
+    context['trade_status'] = items.trade_status
+                                  #1/14 맞으면 삭제
+    return render(request, 'new_post.html', context)
 
 
 
+def remove_post(request, pk):
+    post = Item.objects.get(pk=pk)
+    items = Item.objects.all()
+  
+    post.delete()
+
+    #context = data_visualization()
+    context = dict()
+    context['items'] = items 
+
+        
+    return render(request, 'main/index.html', context)
+    
 
 
+def boardEdit(request, pk):
+  
+    items = Item.objects.get(pk=pk)
+   
+     
+    if request.method == "POST":
+       
+        items.item_name = request.POST.get('item_name')
+        items.item_content = request.POST.get('item_content')
+        items.item_price = request.POST.get('item_price')
+        items.trade_status =request.POST.get('trade_status')
+        item_date= request.POST.get('item_date',False)
 
+        
+        items.save()
+
+        items = Item.objects.get(pk=pk)
+        print(items)
+        if items.trade_status == "거래완료" :
+            
+            #image의 파일 형태가 PIL 형태
+            image = items.item_img
+            
+
+            # PIL 파일 또는 경로는 save할수 없기 때문에 InMemoryUploadedFile 함수를 이용하여 request해온
+            # 이미지 파일 형식과 동일하게 맞춰줘야한다.(불러올 이미지, 새로 저장할 이미지 이름, 저장할 이미지 경로)
+            heat_file = InMemoryUploadedFile(image, None, 'heat.jpeg', 'trade_images/jpeg',
+                                     None, None)
+            
+            item_price = items.item_price
+            status = Trade(item_date=item_date, item_img=heat_file ,item_price=item_price)
+            status.save()
+        
+
+    items = Item.objects.all()
+    #context = data_visualization()
+    context = dict()
+    context['items'] = items
+
+    return render(request, 'home.html', context)
+
+
+def trade(request, item_id):
+    filled_form = Trade(request.POST) #POST 요청이 들어오면,
+    if filled_form.is_valid(): #유효성 검사 성공시 진행
+        
+        temp_form = filled_form.save(commit=False)
+        
+        temp_form.item_id = Item.objects.get(id=item_id)
+        temp_form.user_name = Users.objects.get(user_name=request.session['user_name'])
+        temp_form.item_status = "거래상태"
+        temp_form.save()
+    return redirect('posting', {'trade':trade})
+
+def css(request):
+    return render(request, 'main/css.html')

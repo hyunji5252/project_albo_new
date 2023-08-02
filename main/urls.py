@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from django.conf import settings
+#from django.conf import settings
 #from django.conf.urls.static import static
 
 urlpatterns = [
@@ -13,5 +13,9 @@ urlpatterns = [
     path('upload', views.upload, name = 'upload'),
     path('upload/predict_price', views.predict_price, name='predict_price'),
     path('posting', views.posting, name='posting'),
+    path('posting/<int:pk>/', views.new_post, name='new_post'),
+    path('posting/<int:pk>/upload/', views.remove_post, name= 'remove_post'),
+    path('posting/<int:pk>/edit/', views.boardEdit, name= 'boardEdit'),
+    path('trade', views.trade, name='trade'),
     
 ]

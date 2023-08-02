@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Ogani Template">
+    <meta name="keywords" content="Ogani, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ogani | Template</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="{%static 'detail_page/css/bootstrap.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{%static 'detail_page/css/font-awesome.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{%static 'detail_page/css/elegant-icons.css' %}" type="text/css">
+    <link rel="stylesheet" href="{%static 'detail_page/css/nice-select.css' %}" type="text/css">
+    <link rel="stylesheet" href="{%static 'detail_page/css/jquery-ui.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{%static 'detail_page/css/owl.carousel.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{%static 'detail_page/css/slicknav.min.css' %} " type="text/css">
+    <link rel="stylesheet" href="{%static 'detail_page/css/style.css' %}" type="text/css">
+
+
+      <!-- navbar  -->
+      <link rel="stylesheet" href="{%static 'css/style.css' %}">
+      <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet">
+      
+    
+  <script src="https://kit.fontawesome.com/221ae2e8b7.js" crossorigin="anonymous"></script>
+    <script src="{%static 'js/main.js' %}" defer></script>
+ 
+
+<style>
+  .pro-qty {
+	width: 140px;
+	height: 50px;
+	display: inline-block;
+	position: relative;
+	text-align: center;
+	background: #f5f5f5;
+	margin-bottom: 5px;
+	margin-top: 45px;
+}
+.product__size{
+  width: 450px;
+
+}
+.product__details__text{
+  width: 750px;
+}
+.product__details__text p{
+  width: 750px;
+
+}
+.product__size p{
+  display : flex ;
+  flex-direction: row;
+  margin:auto;
+  /* padding: 25px 35px 0px 35px; */
+  flex-direction:row ;
+}
+
+
+/* .wow{
+  display : flex;
+  flex-direction: row;
+} */
+@font-face {
+            font-family: 'SUIT-Regular';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+
+            font-family: 'Pretendard-Regular';
+            src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+        .btn {
+            
+            background-color:#f9f9f9f8;
+            border-radius:6px;
+            border:1px solid #dcdcdc;
+            display:inline-block;
+            cursor:pointer;
+            color:#464646;
+            font-family:Arial;
+            font-size:10px;
+            font-weight:bold;
+            padding:6px 15px;
+            text-decoration:none;
+
+            
+        }
+/* .row{
+
+} */
+</style>
+</head>
+
+<body>
+    {% include "navbar.html" %}
+    {% block content %}
+
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+   
+
+  
+
+    <!-- Product Details Section Begin -->
+    
+    
+
+<!-- 
+   -------------------------------------  -->
+    <section class="product-details-spad">
+        <div class="product-details">
+        <div class="container">
+            <div class="row">
+                 <!-- 상품 이미지 start -->
+                <div class="col-lg-6 col-md-6">
+                    <div class="product__details__pic">
+                        <div id="product__details__pic__item">
+                                <p style="text-align : center;  padding:0px;"><img width="585px" height="603px" class="product__details__pic__item--large" src="{{ items.item_img.url }}"  name="item_img" alt="" ></p>
+                          </div>
+                    </div>
+                </div>
+                 <!-- 상품 이미지 end -->
+
+                
+                 <form method="POST" action="{% url 'boardEdit' items.pk %}">{% csrf_token %}
+                  
+                  <div class = "product__size">
+                     <div class="product__details__text">
+                        <h3 class="a">판매자 : {{items.user_name}}</h3>
+                        <!-- 상품 이름 start -->
+                      
+                        <p class = "a" style="line-height : 2; ">  <input type="text" class="form-control mt-2" name='item_name' placeholder="{{items.item_name}}"></p>
+                    
+                        <!-- 상품 이름 end -->
+
+                        <!-- 가격 start -->
+                        <p class = "product__details__prices" style="line-height : 2;"> 
+                       <input type="text" class="form-control mt-2" name='item_price' placeholder="￦{{items.item_price}}">
+                        </p>
+                        <!-- 가격 end -->
+
+
+                        
+                        <!-- 내용 start -->
+                        <p class = "a" style="line-height : 2;">  <textarea class="form-control mt-2" rows="10" 
+                          name='item_content' placeholder="{{items.item_content}}"></textarea>
+                          </p>
+                        <!-- 내용 end -->
+
+                         <!-- 거래상태 start -->
+                         
+                          <select class="form-control mt-2" name="trade_status" >
+                            <option name="trade_status" value="거래전">거래전</option>
+                            <option name="trade_status" value="거래완료">거래완료</option>
+                          </select>
+                       
+                           <!-- 거래상태 end -->
+
+                           &nbsp;
+                           &nbsp;
+                           &nbsp;
+
+                        {% if login_user == post_user %}
+                        <div id="jb-sidebar_2">
+                          <ul>
+                          <input class="primary-btn" type="submit" value="수정">
+                          <!-- <button class = "primary-btn" type = "button"  onclick = "location.href='upload/{{post.pk}}'"value="수정">수정</button>     -->
+                          <button class = "primary-btn" type = "button" onclick = "location.href='upload/{{post.pk}}'" value="삭제">삭제</button>
+                        </div>
+                      </div>
+                      </div>
+                        </form>  
+                          
+                          </ul>
+                       
+                        {% endif %}
+                        
+                    </div>
+                    <section class="mb-5">
+                      <br>
+                       &nbsp;
+                        &nbsp;
+                       
+
+                      
+                    </br>
+                
+                  </section>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    <!-- Product Details Section End -->
+
+   
+   
+
+    <!-- Js Plugins -->
+    <script src="{%static 'detail_page/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{%static 'detail_page/js/bootstrap.min.js' %}"></script>
+    <script src="{%static 'detail_page/js/jquery.nice-select.min.js' %}"></script>
+    <script src="{%static 'detail_page/js/jquery-ui.min.js' %}"></script>
+    <script src="{%static 'detail_page/js/jquery.slicknav.js' %}"></script>
+    <script src="{%static 'detail_page/js/mixitup.min.js' %}"></script>
+    <script src="{%static 'detail_page/js/owl.carousel.min.js' %}"></script>
+    <script src="{%static 'detail_page/js/main.js' %}"></script>
+    <div id="jb-footer">
+
+<!-- 댓글 답글 start -->
+    
+<!-- 댓글 답글 end -->
+
+              
+    
+
+{% endblock %}
+</body>
+
+</html>

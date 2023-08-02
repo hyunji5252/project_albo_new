@@ -35,16 +35,158 @@
         <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet">
         <script src="https://kit.fontawesome.com/221ae2e8b7.js" crossorigin="anonymous"></script> 
         <script src="{%static 'js/main.js' %}" defer></script>
+
+
         <style>
+            #top .left-content {
+                background-image: url("{%static 'img/KakaoTalk_20221215_105156732.png' %}");
+                background-position: center center;
+                background-repeat: no-repeat;
+                background-size: cover;
+                position: relative;
+                width: 100%;
+                height: 100%;
+                }
+                .main-white-button a {
+                font-size: 13px;
+                color: #111010;
+                background-color: #fff;
+                padding: 12px 25px;
+                display: inline-block;
+                border-radius: 3px;
+                font-weight: 600;
+                transition: all .3s;
+                }
+
+                .myBtn {
+                    background-color:#86cfa2;
+                    border-radius:10px;
+                    display:inline-block;
+                    cursor:pointer;
+                    color:#ffffff;
+                    padding:2px 7px;
+                    text-decoration:none;
+                    font-family: 'LINESeedKR-Bd';
+                }
+
+                .fa-text {
+                    font-family: 'SUIT-Regular';
+                    font-size: 17px;
+                    color: #3e4b43;
+                    }
 
         </style>
     </head>
     <body>
         {% include "navbar.html" %}
         {% block content %}
-        <!-- <h5>환영합니다!</h5> -->
+        
 
+        <!-- ***** Preloader Start ***** 로딩화면-->
+    <div id="preloader">
+        <div class="jumper">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>  
+   
 
+  
+
+    <!-- 이미지 삽입 -->
+    <div class="wrap">
+        {% for item in items  %}
+  
+        <div class ="col-xs-3">
+            <div class="col-xs-4">
+                <form action="{% url 'home' %}" method="POST">{% csrf_token %}
+        
+                    {% if item.item_img %}
+                    <a href="{{item.get_absolute_url}}" target="_blank">
+                        <img src="{{ item.item_img.url }}" alt="" >
+                    
+                        <br>
+                        {% endif %}
+            
+                        <div>  
+                            <p class="fa-text"><i class="fa-solid fa-seedling"></i>&nbsp{{item.item_name}}&nbsp<i class="fa-solid fa-seedling"></i></p>
+                        </div>
+                        <div>
+                            <p class="fa-text"><i class="fa-solid fa-won-sign"></i>&nbsp{{item.item_price}}</p>
+                        </div>
+                        <div>
+                            <p class="fa-text"><i class="fa-regular fa-user"></i>&nbsp {{item.user_name}}</p>
+                        </div>
+                        <div>
+                            <p class="myBtn" style="font-size: 12px;"><i> {{item.trade_status}} </i></p>
+                        </div>
+
+                    </a>
+            
+                </form>
+            </div>
+        </div>
+      {% endfor %}
+  
+    </div>
+
+    <!-- ***** Menu Area Starts ***** -->
+   
+    <!-- ***** Menu Area Ends ***** -->
+
+    <!-- ***** Chefs Area Starts ***** -->
+   
+    <!-- ***** Chefs Area Ends ***** -->
+
+    <!-- ***** Reservation Us Area Starts ***** -->
+    
+    <!-- ***** Reservation Area Ends ***** -->
+
+    <!-- ***** Menu Area Starts ***** -->
+  
+    <!-- ***** Chefs Area Ends ***** --> 
+    
+   
+
+    <!-- jQuery -->
+    <script src="{%static 'assets/js/jquery-2.1.0.min.js' %}"></script>
+
+    <!-- Bootstrap -->
+    <script src="{%static 'assets/js/popper.js' %}"></script>
+    <script src="{%static 'assets/js/bootstrap.min.js' %}"></script>
+
+    <!-- Plugins -->
+    <script src="{%static 'assets/js/owl-carousel.js' %}"></script>
+    <script src="{%static 'assets/js/accordions.js' %}"></script>
+    <script src="{%static 'assets/js/datepicker.js'%}"></script>
+    <script src="{%static 'assets/js/scrollreveal.min.js'%}"></script>
+    <script src="{%static 'assets/js/waypoints.min.js'%}"></script>
+    <script src="{%static 'assets/js/jquery.counterup.min.js'%}"></script>
+    <script src="{%static 'assets/js/imgfix.min.js'%}"></script> 
+    <script src="{%static 'assets/js/slick.js'%}"></script> 
+    <script src="{%static 'assets/js/lightbox.js' %}"></script> 
+    <script src="{%static 'assets/js/isotope.js' %}"></script> 
+    
+    <!-- Global Init -->
+    <script src="{%static 'assets/js/custom.js' %}"></script>
+    <script>
+
+        $(function() {
+            var selectedClass = "";
+            $("p").click(function(){
+            selectedClass = $(this).attr("data-rel");
+            $("#portfolio").fadeTo(50, 0.1);
+                $("#portfolio div").not("."+selectedClass).fadeOut();
+            setTimeout(function() {
+              $("."+selectedClass).fadeIn();
+              $("#portfolio").fadeTo(50, 1);
+            }, 500);
+                
+            });
+        });
+
+    </script>
 
         {% endblock %}
     </body>

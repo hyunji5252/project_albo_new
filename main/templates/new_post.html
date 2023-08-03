@@ -134,68 +134,122 @@
                  <!-- 상품 이미지 end -->
 
                 
-                 <form method="POST" action="{% url 'boardEdit' items.pk %}">{% csrf_token %}
-                  
-                  <div class = "product__size">
-                     <div class="product__details__text">
-                        <h3 class="a">판매자 : {{items.user_name}}</h3>
-                        <!-- 상품 이름 start -->
-                      
-                        <p class = "a" style="line-height : 2; ">  <input type="text" class="form-control mt-2" name='item_name' placeholder="{{items.item_name}}"></p>
+                    <form method="POST" action="{% url 'boardEdit' items.pk %}">{% csrf_token %}
                     
-                        <!-- 상품 이름 end -->
+                        <div class = "product__size">
+                          <div class="product__details__text">
+                              <h3 class="a">판매자 : {{items.user_name}}</h3>
+                              <!-- 상품 이름 start -->
+                            
+                              <p class = "a" style="line-height : 2; ">  <input type="text" class="form-control mt-2" name='item_name' placeholder="{{items.item_name}}"></p>
+                          
+                              <!-- 상품 이름 end -->
 
-                        <!-- 가격 start -->
-                        <p class = "product__details__prices" style="line-height : 2;"> 
-                       <input type="text" class="form-control mt-2" name='item_price' placeholder="￦{{items.item_price}}">
-                        </p>
-                        <!-- 가격 end -->
+                              <!-- 가격 start -->
+                              <p class = "product__details__prices" style="line-height : 2;"> 
+                            <input type="text" class="form-control mt-2" name='item_price' placeholder="￦{{items.item_price}}">
+                              </p>
+                              <!-- 가격 end -->
 
 
-                        
-                        <!-- 내용 start -->
-                        <p class = "a" style="line-height : 2;">  <textarea class="form-control mt-2" rows="10" 
-                          name='item_content' placeholder="{{items.item_content}}"></textarea>
-                          </p>
-                        <!-- 내용 end -->
+                              
+                              <!-- 내용 start -->
+                              <p class = "a" style="line-height : 2;">  <textarea class="form-control mt-2" rows="10" 
+                                name='item_content' placeholder="{{items.item_content}}"></textarea>
+                                </p>
+                              <!-- 내용 end -->
 
-                         <!-- 거래상태 start -->
-                         
-                          <select class="form-control mt-2" name="trade_status" >
-                            <option name="trade_status" value="거래전">거래전</option>
-                            <option name="trade_status" value="거래완료">거래완료</option>
-                          </select>
-                       
-                           <!-- 거래상태 end -->
+                              <!-- 거래상태 start -->
+                              
+                                <select class="form-control mt-2" name="trade_status" >
+                                  <option name="trade_status" value="거래전">거래전</option>
+                                  <option name="trade_status" value="거래완료">거래완료</option>
+                                </select>
+                            
+                                <!-- 거래상태 end -->
 
-                           &nbsp;
-                           &nbsp;
-                           &nbsp;
+                                &nbsp;
+                                &nbsp;
+                                &nbsp;
 
-                        {% if login_user == post_user %}
-                        <div id="jb-sidebar_2">
-                          <ul>
-                          <input class="primary-btn" type="submit" value="수정">
-                          <!-- <button class = "primary-btn" type = "button"  onclick = "location.href='upload/{{post.pk}}'"value="수정">수정</button>     -->
-                          <button class = "primary-btn" type = "button" onclick = "location.href='upload/{{post.pk}}'" value="삭제">삭제</button>
+                              {% if login_user == post_user %}
+                              <div id="jb-sidebar_2">
+                                <ul>
+                                <input class="primary-btn" type="submit" value="수정">
+                                <!-- <button class = "primary-btn" type = "button"  onclick = "location.href='upload/{{post.pk}}'"value="수정">수정</button>     -->
+                                <button class = "primary-btn" type = "button" onclick = "location.href='upload/{{post.pk}}'" value="삭제">삭제</button>
+                              </div>
+                              {% endif %}
+                          </div>
                         </div>
-                      </div>
-                      </div>
-                        </form>  
+                    </form>  
                           
                           </ul>
                        
-                        {% endif %}
+                        
                         
                     </div>
                     <section class="mb-5">
                       <br>
                        &nbsp;
                         &nbsp;
-                       
+                        <div class="row">
+                          <div class="card-body">
+                              <form class="mb-4" method="POST" action="{% url 'create_comment' items.id %}">{% csrf_token %}
+                                  
+                                  <textarea class="form-control" row="3" name="comment" placeholder="댓글을 입력해주세요"></textarea>
+                                  <input class="btn" type="submit" value="작성" style="position: relative; top: 5px;">
+                              </form>
+                              <!-- 댓글 -->
+                              {% for comment in items.post.all reversed %}
+                                  {% if comment.is_parent %}
+                                      <div class="d-flex mb-4">
+                                          
+                                          <div class="ms-3">
+                                              <div class="user_n_date" style="border-bottom: 2px solid #e9e9e9;"> <!-- 이름+날짜 -->
+                                                  <span><a style="font-family: 'SUIT-Regular'; font-size: 20px;">{{ comment.user_name }}</a></span>
+                                                  <span><a style="color: #969b94d9; position: relative; top: 3px;">&nbsp;{{ comment.comment_date }}</a></span>
+                                              </div>
+                                              <div class="comment" style="line-height:80%; font-family: 'Pretendard-Regular';"> <!-- 댓글내용 -->
+                                                  <br>
+                                                  {{ comment.comment }}
+                                              </div>
+                                              <!-- 답글 -->
+                                              <div class="reply" style="position: relative; left: 30px;">
+                                                  {% for replies in comment.children %}
+                                                      <div class="d-flex mt-4">
+                                                          <div class="ms-3">
+                                                              <div class="user_n_date" style="border-bottom: 2px solid #e9e9e9; float:left;"> <!-- 이름+날짜 -->
+                                                                  <span><a style="font-family: 'SUIT-Regular'; font-size: 20px;">{{ replies.user_name }}</a></span>
+                                                                  <span><a style="color: #969b94d9; position: relative; top: 3px;">&nbsp;{{ replies.comment_date }}</a></span>
+                                                              </div>
+                                                              <div class="comment" style="line-height:200%; font-family: 'Pretendard-Regular';"> <!-- 댓글내용 -->
+                                                                  <br>
+                                                                  {{ replies.comment }}
+                                                              </div>
+                                                          </div>
+                                                      </div>
+                                                  {% endfor %}
+                                                  <form method="POST" action="{% url 'create_reply' items.id %}" class="replies">
+                                                      {% csrf_token %}
+                                                      <div class="write_reply"  style="line-height:80%;">
+                                                          <br>
+                                                          <input type="text" name="comment" placeholder="답글을 입력해주세요"> <input type="hidden" value="{{comment.pk}}" name="parent"> <input class="btn" type="submit" value="작성" style="position: relative; bottom: 2px;">
+                                                      </div>
+                                                  </form>
+                                              </div>
+
+                                          </div>
+                                              
+                                      </div>
+                                  {% endif %}
+                              {% endfor %}
+                          </div>
+                      </div>
+                   
 
                       
-                    </br>
+                      </br>
                 
                   </section>
                 </div>

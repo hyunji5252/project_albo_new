@@ -17,5 +17,7 @@ urlpatterns = [
     path('posting/<int:pk>/upload/', views.remove_post, name= 'remove_post'),
     path('posting/<int:pk>/edit/', views.boardEdit, name= 'boardEdit'),
     path('trade', views.trade, name='trade'),
+    path('create_comment/<int:items_id>', views.create_comment, name='create_comment'),
+    path('create_reply/<int:items_id>', views.create_reply, name='create_reply'),
     
 ]

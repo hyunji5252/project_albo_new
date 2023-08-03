@@ -42,6 +42,10 @@ def join(request):
     gender = request.POST['signupGender']
     age = request.POST['signupAge']
 
+    items = Item.objects.all().order_by('-pk') 
+    context = visual.data_visualization()
+    context['items'] = items
+
     if pw==pw_check:
         user = Users(user_name = name, user_email = email, user_password = pw, user_gender = gender, user_age = age)
         user.save()
@@ -49,7 +53,7 @@ def join(request):
     # context = data_visualization()
     # context['items'] = items
 
-        return render(request, 'home.html')
+        return render(request, 'home.html', context)
 
     else:
         return render(request, 'signup.html')
@@ -61,12 +65,17 @@ def login(request):
     loginEmail = request.POST['loginEmail'] # signin.html <input name=loginEmail> 사용을 위해
     loginPW = request.POST['loginPW']  # signin.html <input name=loginPW> 사용을 위해
     user = Users.objects.get(user_email = loginEmail)
+
+    items = Item.objects.all().order_by('-pk') 
+    context = visual.data_visualization()
+    context['items'] = items
+
     if user.user_password == loginPW:
         request.session['user_name'] = user.user_name
         request.session['user_email'] = user.user_email
         #login_user = request.session['user_name']
-        print(request.session['user_name'])
-        return render(request, 'home.html')
+        
+        return render(request, 'home.html', context)
     else:
         return redirect('signin')  
 
@@ -181,16 +190,15 @@ def new_post(request, pk):
 
 def remove_post(request, pk):
     post = Item.objects.get(pk=pk)
-    items = Item.objects.all()
   
     post.delete()
 
-    #context = data_visualization()
-    context = dict()
-    context['items'] = items 
+    items = Item.objects.all().order_by('-pk') 
+    context = visual.data_visualization()
+    context['items'] = items
 
         
-    return render(request, 'main/index.html', context)
+    return render(request, 'home.html', context)
     
 
 
@@ -211,7 +219,7 @@ def boardEdit(request, pk):
         items.save()
 
         items = Item.objects.get(pk=pk)
-        print(items)
+     
         if items.trade_status == "거래완료" :
             
             #image의 파일 형태가 PIL 형태
@@ -228,12 +236,43 @@ def boardEdit(request, pk):
             status.save()
         
 
-    items = Item.objects.all()
-    #context = data_visualization()
-    context = dict()
+    items = Item.objects.all().order_by('-pk') 
+    context = visual.data_visualization()
     context['items'] = items
 
     return render(request, 'home.html', context)
+
+
+def create_comment(request, items_id):
+    comment_form = CommentForm(request.POST)
+    if comment_form.is_valid():
+        comment = comment_form.cleaned_data['comment']
+        parent=None
+        
+
+    user = Users.objects.get(user_name=request.session['user_name'])
+    items = Item.objects.get(pk=items_id)
+    
+
+    new_comment = Comment(comment=comment, user_name=user, item_id=items, parent=parent)
+    new_comment.save()
+
+    return redirect('new_post', items_id)
+
+def create_reply(request, items_id):
+    reply_form = ReplyForm(request.POST) 
+    if reply_form.is_valid():
+        parent = reply_form.cleaned_data['parent']
+        reply = reply_form.cleaned_data['comment']
+        
+
+    user = Users.objects.get(user_name=request.session['user_name'])
+    items = Item.objects.get(pk=items_id)
+
+    new_comment = Comment(comment=reply, user_name=user, item_id=items, parent=parent)
+    new_comment.save()
+
+    return redirect('new_post', items_id)
 
 
 def trade(request, item_id):

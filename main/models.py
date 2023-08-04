@@ -2,6 +2,7 @@ from django.db import models
 from django.forms import ModelForm # 모델 폼 설정
 
 from django.conf import settings
+from django.utils import timezone
 
 #회원 테이블
 class Users(models.Model):
@@ -26,7 +27,6 @@ class Item(models.Model):
     item_content = models.TextField(max_length = 200) 
     item_img = models.ImageField(upload_to="images/", blank=True, null=True)
     
-    # item_date = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return f'[{self.pk}]{self.item_name}'
@@ -67,4 +67,6 @@ class Comment(models.Model):
 class Trade(models.Model):
         item_img = models.ImageField(upload_to="trade_images/", blank=True, null=True)
         item_price = models.IntegerField(null=True)
-        item_date = models.DateField(auto_now_add=True,null=True)
+        trade_date = models.DateField(auto_now_add=True,null=True)
+        user_gender = models.IntegerField(default=0,blank=True, null=True)
+        user_age = models.IntegerField(default=0, blank=True, null=True)

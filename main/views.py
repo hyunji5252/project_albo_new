@@ -7,6 +7,7 @@ from django.db.models import Q # Q는 Django내 Model을 관리할 때 사용되
 from .forms import *
 from datetime import datetime
 from django.http import HttpResponse
+
 #from google.protobuf import descriptor as _descriptor
 
 from PIL import Image
@@ -33,8 +34,6 @@ def signup(request):
 
 def join(request):
     
-    # 메인화면 접속 시 필요한 데이터
-    #items = Item.objects.all()
     name = request.POST['signupName']
     email = request.POST['signupEmail']
     pw = request.POST['signupPW']
@@ -49,9 +48,6 @@ def join(request):
     if pw==pw_check:
         user = Users(user_name = name, user_email = email, user_password = pw, user_gender = gender, user_age = age)
         user.save()
-    
-    # context = data_visualization()
-    # context['items'] = items
 
         return render(request, 'home.html', context)
 
@@ -213,12 +209,12 @@ def boardEdit(request, pk):
         items.item_content = request.POST.get('item_content')
         items.item_price = request.POST.get('item_price')
         items.trade_status =request.POST.get('trade_status')
-        item_date= request.POST.get('item_date',False)
 
         
         items.save()
 
         items = Item.objects.get(pk=pk)
+        users = Users.objects.get(pk=pk)
      
         if items.trade_status == "거래완료" :
             
@@ -232,7 +228,11 @@ def boardEdit(request, pk):
                                      None, None)
             
             item_price = items.item_price
-            status = Trade(item_date=item_date, item_img=heat_file ,item_price=item_price)
+            user_gender = users.user_gender
+            user_age = users.user_age
+
+            status = Trade(item_img=heat_file ,item_price=item_price, 
+                           user_gender=user_gender, user_age = user_age)
             status.save()
         
 

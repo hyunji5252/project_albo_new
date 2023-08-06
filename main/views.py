@@ -25,7 +25,13 @@ import main.visualization as visual #시각화 데이터 함수
 
 def home(request):
     items = Item.objects.all().order_by('-pk') 
+    user = str(request.user)
+    if user=='AnonymousUser':
+        user = 'non-member'
+    else:
+        user = Users.objects.get(user_name=request.user)
     context = visual.data_visualization()
+    context['user'] = user
     context['items'] = items
     return render(request, 'home.html', context)
 
@@ -167,8 +173,12 @@ def new_post(request, pk):
     
     items = Item.objects.get(pk=pk)
     
-    # trade_status = items.trade_status
-    login_user = request.session['user_name']
+    user = str(request.user)
+    if user=='AnonymousUser':
+        login_user = 'non-member'
+    else:
+        login_user = request.session['user_name']
+
     post_user = str(items.user_name)
      
     comments = CommentForm() #forms.py

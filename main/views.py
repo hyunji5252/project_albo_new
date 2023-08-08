@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.db.models import Q # Q는 Django내 Model을 관리할 때 사용되는 ORM으로 SQL의 WHERE절과 같은 조건문을 추가할 때 사용한다.
 from .forms import *
 from datetime import datetime
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 #from google.protobuf import descriptor as _descriptor
 
@@ -25,18 +25,23 @@ import main.visualization as visual #시각화 데이터 함수
 
 def home(request):
     items = Item.objects.all().order_by('-pk') 
-    user = str(request.user)
-    if user=='AnonymousUser':
-        user = 'non-member'
-    else:
-        user = Users.objects.get(user_name=request.user)
     context = visual.data_visualization()
-    context['user'] = user
-    context['items'] = items
-    return render(request, 'home.html', context)
+
+    user_name = request.session.get('user_name')
+    if user_name:
+        user = user_name
+        context['user'] = user
+        context['items'] = items
+        return render(request, 'home.html', context)
+    else:
+        context['nonuser'] = 'nonuser'
+        context['items'] = items
+        return render(request, 'home.html', context)
 
 def signup(request):
-    return render(request, 'signup.html')
+    context = dict()
+    context['nonuser'] = 'nonuser'
+    return render(request, 'signup.html', context)
 
 def join(request):
     
@@ -61,32 +66,33 @@ def join(request):
         return render(request, 'signup.html')
 
 def signin(request):
-    return render(request, 'signin.html')
+    context = dict()
+    context['nonuser'] = 'nonuser'
+    return render(request, 'signin.html', context)
 
 def login(request):
     loginEmail = request.POST['loginEmail'] # signin.html <input name=loginEmail> 사용을 위해
     loginPW = request.POST['loginPW']  # signin.html <input name=loginPW> 사용을 위해
     user = Users.objects.get(user_email = loginEmail)
 
-    items = Item.objects.all().order_by('-pk') 
-    context = visual.data_visualization()
-    context['items'] = items
-
     if user.user_password == loginPW:
         request.session['user_name'] = user.user_name
         request.session['user_email'] = user.user_email
-        #login_user = request.session['user_name']
         
-        return render(request, 'home.html', context)
+        return redirect('home')
     else:
         return redirect('signin')  
 
 
 def logout(request):
-    del request.session['user_name']
-    del request.session['user_email']
+    if request.session.get('user_name'):
+        del request.session['user_name']
+        del request.session['user_email']
 
-    return render(request,'signin.html')
+    context = dict()
+    context['nonuser'] = 'nonuser'
+
+    return render(request,'signin.html', context)
 
 
 def upload(request):
@@ -160,8 +166,6 @@ def posting(request):
         new_name.save()
 
 
-    # context = data_visualization()
-    # context['items'] = items
 
     items = Item.objects.all().order_by('-pk') 
     context = visual.data_visualization()
@@ -170,26 +174,28 @@ def posting(request):
     return render(request, 'home.html', context) 
 
 def new_post(request, pk):
-    
     items = Item.objects.get(pk=pk)
-    
-    user = str(request.user)
-    if user=='AnonymousUser':
-        login_user = 'non-member'
+    context = dict()
+
+    #로그인 유무 확인
+    user_name = request.session.get('user_name')
+    if user_name:
+    	login_user = user_name
     else:
-        login_user = request.session['user_name']
+        login_user = 'non-member'
+        context['nonuser'] = 'nonuser'
 
     post_user = str(items.user_name)
-     
+
     comments = CommentForm() #forms.py
-   
-    context = dict()
+
     context['items'] = items
     context['comments'] = comments
-    context['login_user'] = login_user
-    context['post_user'] =  post_user
+    context['login_user'] = str(login_user)
+    context['post_user'] =  str(post_user)
     context['trade_status'] = items.trade_status
-                                  #1/14 맞으면 삭제
+
+                                 
     return render(request, 'new_post.html', context)
 
 
@@ -254,35 +260,43 @@ def boardEdit(request, pk):
 
 
 def create_comment(request, items_id):
-    comment_form = CommentForm(request.POST)
-    if comment_form.is_valid():
-        comment = comment_form.cleaned_data['comment']
-        parent=None
+    user_name = request.session.get('user_name')
+    if user_name:
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.cleaned_data['comment']
+            parent=None
+            
+
+        user = Users.objects.get(user_name=request.session['user_name'])
+        items = Item.objects.get(pk=items_id)
         
 
-    user = Users.objects.get(user_name=request.session['user_name'])
-    items = Item.objects.get(pk=items_id)
+        new_comment = Comment(comment=comment, user_name=user, item_id=items, parent=parent)
+        new_comment.save()
+        return redirect('new_post', items_id)
+    else:
+        return JsonResponse({"message":"please, login"}, status=401) 
+
     
-
-    new_comment = Comment(comment=comment, user_name=user, item_id=items, parent=parent)
-    new_comment.save()
-
-    return redirect('new_post', items_id)
-
 def create_reply(request, items_id):
     reply_form = ReplyForm(request.POST) 
-    if reply_form.is_valid():
-        parent = reply_form.cleaned_data['parent']
-        reply = reply_form.cleaned_data['comment']
-        
+    user_name = request.session.get('user_name')
+    if user_name:
+        if reply_form.is_valid():
+            parent = reply_form.cleaned_data['parent']
+            reply = reply_form.cleaned_data['comment']
+            
 
-    user = Users.objects.get(user_name=request.session['user_name'])
-    items = Item.objects.get(pk=items_id)
+        user = Users.objects.get(user_name=request.session['user_name'])
+        items = Item.objects.get(pk=items_id)
 
-    new_comment = Comment(comment=reply, user_name=user, item_id=items, parent=parent)
-    new_comment.save()
+        new_comment = Comment(comment=reply, user_name=user, item_id=items, parent=parent)
+        new_comment.save()
 
-    return redirect('new_post', items_id)
+        return redirect('new_post', items_id)
+    else:
+        return JsonResponse({"message":"please, login"}, status=401) 
 
 
 def trade(request, item_id):

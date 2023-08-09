@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <!-- Boot strap -->
+        <!-- 합쳐지고 최소화된 최신 CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+        <!-- 부가적인 테마 -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+        <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+        
+        <style>
+            .btn {
+                position:relative;
+                left:40%;
+                transform: translateX(-50%);
+                margin-bottom: 40px;
+                width:80%;
+                height:40px;
+                background: linear-gradient(125deg,#81ecec,#84e6c5,#81ecec);
+                background-position: left;
+                background-size: 200%;
+                color:white;
+                font-weight: bold;
+                border:none;
+                cursor:pointer;
+                transition: 0.4s;
+                display:inline;
+                }
+
+            .btn:hover {
+                background-position: right;
+                }
+        </style>
+
+        <title>관리자 페이지</title>
+    </head>
+    <body>
+        <form action="update_model", method="POST">
+            {% csrf_token %}
+            <input type="submit" class="btn" value="추가학습">
+            <br>
+            <h>*현재 이 기능은 실행하지 못하게 막아두었습니다*</h>
+        </form>
+    </body>
+</html>
